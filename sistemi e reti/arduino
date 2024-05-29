@@ -1,0 +1,14 @@
+anodo +
+catodo -
+
+ponticelli: fili rosso e nero
+
+fila A: collegare + alla fila 12 e - alla fila 11
+fila B: parte iniziale resistenza fino alla fila H
+
+cambio voltaggio sennò si brucia il led
+
+ponticello: collegare i pin alla terra(sul negativo)
+
+cavo rosso: 9-12,J
+cavo nero: riga 11, E-gnd
