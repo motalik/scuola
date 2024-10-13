@@ -21,4 +21,3 @@ Grazie
 
 
 
-![animation-0001](https://github.com/motalik/scuola/assets/125689426/364670ea-0442-4048-ab92-49eed31b71ab)
