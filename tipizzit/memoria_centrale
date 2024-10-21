@@ -1,0 +1,215 @@
+MEMORIA CENTRALE: 
+-È una risorsa condivisa tra i processi 
+-segue dei meccanismi di gestione 
+-ha dei metodi come paginazione e segmentazione della memoria 
+Per sciegliere il metodo da adottare bisogna vedere l'architettura: 
+
+Livello hardware: 
+
+-RAM: memoria accessibile dalla CPU 
+-La CPU fa il fetch delle operazioni e il load dei dati nella ram e poi lo store 
+Ciclo: 
+1-fetch 
+2-decode 
+3-execute 
+
+Livello 0: 
+
+Registri: dentro la CPU 
+Cache: mette a disposizione dei dati tra cpu e ram per consentire velocità,  
+RAM: accessibile coi BUS 
+
+
+Memoria e processi: 
+
+I vari processi usano delle porzioni di RAM 
+Per evitare che un processo sovrasscriva un altro si assegna ad ogni processo un'area personale 
+
+1-un processo viene caricato nella RAM con codice e dati 
+2-ogni volta che un processo viene eseguito si creano dei registri 
+3-la CPU permette al processo di accedere alla RAM 
+4-il processo deve accedere solo alla porzione di RAM assegnata e non eccedere 
+
+ 
+
+Registro base e limite: 
+
+Per mappare una RAM (che sarebbe un array) mi servono due indici: 
+Uno nel primo elemento e uno nell'ultimo 
+Solo l'SO può caricare dei valori nel registro base e limite 
+L'SO può accedere a tutta la RAM 
+
+ 
+Binding tra variabili e indirizzi: 
+
+Un processo esegue un programma con all'interno le variabili e la logica 
+Nella RAM si usano degli indici 
+ 
+Programma->compilazione: 
+-generazione di indirizzi 
+-modulo oggetto->linker->modulo rilocabile->loader->modulo eseguibile 
+
+Spazi degli indirizzi di un processo: 
+
+ 
+Spazio indirizzi logici(prodotti dalla CPU) -> binding -> spazio indirizzi fisici(nella RAM) 
+
+Binding: mapping dello spazio occupato dagli indirizzi logici in un processo 
+-Binding durante il periodo di compilazione e caricamento: indirizzo logico = fisico 
+-binding durante l'esecuzione: indirizzo logico =/ fisico 
+
+ 
+MMU: realizzato secondo il meccanismo basato sul registro base 
+
+ Linking e loading: 
+Linking: processo che crea i moduli di un programma,  
+Loading: copia nella RAM un programma eseguibile 
+Quando precedono l'esecuzione sono statici, se sono svolti durante allora sono dinamici 
+
+ Modulo oggetto n -> linker -> modulo rilocabile -> loader -> RAM(o cache) 
+
+Statici:  
+in ogni libreria inserisco una copia del codice 
+Eseguibile: composizione di: 
+-file contenente il main 
+-file contenente le librerie 
+
+Dinamici: 
+Loading dinamico: usato per caricare un processo la prima volta che viene usato 
+Linking dinamico: durante il primo utilizzo del processo aggiunge uno STUB(riferimento al codice gia caricato) 
+
+  
+
+ALLOCAZIONE DELLA RAM 
+
+-allocazione contigua 
+-paginazione 
+-segmentazione 
+
+ 
+Allocazione contigua: 
+
+ 
+-rilocazione e protezione 
+-partizione multiple 
+-frammentazione 
+
+ 
+Suddivide la RAM in due livelli, uno riservato al SO(memoria bassa) e una ai processi utente 
+
+L'SO deve essere protetto dalle azioni dell'utente, ciò avviene con un registro di rilocazione 
+L'SO è suddiviso in un nucleo di base e in codice transiente(rimosso e aggiunto quando si vuole) 
+
+ Allocazione a partizioni multiple: 
+
+
+-La RAM deve essere libera 
+-il SO deve avere delle porzioni libere dette buchi 
+-un processo può essere caricato in RAM solo se c'è spazio per la sua immagine 
+
+
+Criteri di scelta: 
+-Best-fit scelta della porzione più piccola per contenere l'immagine 
+-First-fit: scelta della prima porzione abbastanza grande 
+-Worst-fit: scelta della porzione più grande 
+
+ 
+Frammentazione della memoria: 
+Spezzettamento della memoria in tante parti: 
+-esterna: se sono abbastanza grandi da poter essere usate 
+-interna: se sono talmente piccole da non poter essere usate, vengono poi unite alla partizione precedente 
+
+
+La frammentazione è un problema: 
+Con il first-fit si perde circa 1/3 della memoria, anche se è meno costosa 
+Per combattere la frammentazione si può usare una politica di compattamento(le immagini dei processi si spostano così da avvicinarle) 
+Il compattamento è applicabile solo se il binding è effettuato in tempo di esecuzione 
+
+ 
+Swapping: 
+Dato che la RAM ha dimensione limitata può succedere che siano richiesti molti più processi che la RAM possa ospitare così si effettua lo swapping tra i processi nella RAM e quelli nella memoria secondaria 
+Swap-in: quando si carica l'immagine di un processo della memoria secondaria 
+Swap-out: quando si scarica l'immagine di un processo non in esecuzione nella memoria secondaria 
+
+ 
+La collocazione dipende dal momento in cui ho fatto il binding: 
+-se il codice non è rilocabile l'immagine dovrà tornare dov'era nella RAM 
+-se è rilocabile allora non serve 
+
+ 
+Rilocazione e protezione: 
+
+Il contenuto del registro di rilocazione può cambiare nel tempo ed possibile solo se l'architettura dell'HW lo permette 
+
+Paginazione della memoria: 
+
+Meccanismo dei gestione della RAM sostitutivo dell'allocazione contigua 
+Spazio degli indirizzi di un processo: insieme di tutti gli indirizzi a cui il processo ha accesso 
+La paginazione permette agli indirizzi fisici di un processo di non essere vicini: 
+-vantaggioso 
+-Consente di far (de)crescere in modo dinamico lo spazio riservato a un processo, semplicemente (togliendo) aggiungendo delle pagine 
+-quindi posso mandare in RAM un pezzo di codice e man mano inviarne altro 
+-possibile solo se l'architettura dell'HW lo permette 
+
+ 
+La RAM è vista come una memoria logica strutturata in pagine, esiste come memoria fisica strutturata in frame e ha una memoria secondaria strutturata in blocchi 
+-> blocchi, frame a pagine fanno riferimento a porzioni di memoria della stessa dimensione 
+
+ Pagine e frame: 
+Indirizzo logico è una coppia <numero_pagina, offset>(<p, o>) mentre uno fisico è <id_frame, offset>(<f, o>) 
+Offset=distanza tra un punto di riferimento e uno spostato 
+
+Indirizzi logici: 
+La dimensione è sempre la stessa ed è una potenza di 2 
+
+Paginazione e rilocazione: 
+
+Rilocare il codice significa consentire l'accesso ad una pagina indifferentemente dal frame in cui è caricata 
+Il registro di rilocazione corrisponde a "p" mentre l'indirizzo di inizio del frame con "f" 
+L'indirizzo base del frame=dimensione dei frame * numero frame considerato 
+
+Paginazione e frammentazione: 
+
+Con la paginazione si toglie il problema della frammentazione esterna ma resta quello della interna 
+Le pagine per processo che hanno frammentazione interna è solo una + un pezzetto 
+Quindi avremo circa mezza pagine non utilizzata per ogni processo 
+Pagine piccole: riducono la frammentazione 
+Pagine grandi: migliori quando serve trasferire molti dati dalla memoria secondaria 
+
+Ogni processo nella RAM ha la propria tabella delle pagine del PCB 
+
+Il SO tiene conto del numero e lista dei frame liberi in una tabella dei frame 
+
+Architettura 
+
+PCB-> contiene informazioni circa il processo a cui appartiente 
+Dispatcher-> carica le sue pagine nella RAM aggiornando la tabella dei frame e delle pagine 
+
+La tabella delle pagine: 
+Pro: registri con accesso veloce 
+Contro: troppo pchi 
+-viene memorizzata della RAM e usa il registro PTBR che contiene l'indirizzo base della tabella(modificato poi dal dispatcher) 
+
+ 
+1)Col PTBR accedo alla RAM per vedere la tabella delle pagine 
+2)con la tabella poi creo l'indirizzo fisico 
+3)accedo all'indirizzo fisico nella RAM 
+== gli accessi raddoppiano(punto 1 e 2) 
+
+Soluzione-> 
+TLB, cache veloce che contiene <chiave, valore> e confronta l'input con tutte le chiavi, se trova la chiave associata allora restitiuisce il valore 
+Chiavi=numeri di pagine 
+Valori=numero frame 
+se il TLB non riesce a reperire il frame allora bisogna accedere alla tabella delle pagine 
+
+ 
+Hit ratio: 
+
+Percentuale di successo collegato al reperimento di una pagine col TLB 
+Consente di calcolare il tempo medio di accesso a una pagina 
+
+Si inserisce una nuova coppia nel TBL quando non si trova la pagina di interesse: 
+-se c'è spazio si mette una nuova coppia <pagina, frame> 
+-se non c'è spazio allora si sostiuisce una coppia gia esistente(alcune sono però non sovrascrivibili) 
+
+ 
