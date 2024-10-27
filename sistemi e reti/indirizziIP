@@ -1,0 +1,156 @@
+dispositivi di rete a livello 2:
+
+Tempo fa l'ethernet aveva un singolo cavo coassiale, con agli estremi i terminatori, la rete poi veniva connessa ad un ripetitore, a cui si potevano connettere massimo 5 segmenti, e solo 3 potevano avere degli host connessi, gli altri no
+Repeater: apparato che riceve, amplifica e sincronizza i pacchetti
+
+BRIDGE:
+
+livello 1 dell'ISO/OSI
+
+ripetitori di informazioni che ritrasmettono i dati in entrata a tutte le altre interfacce collegate
+Se un adattatore è difettoso, l'hub riesce a rilevarlo e quindi disconnetterlo
+
+In una rete multilivello a hub si può mettere in cima l'hub(backbone hub) e in basso i singoli hub
+
+Gli hub non isolano i domini di collisione, quindi i dati riceventi da diverse stazioni possono sovrapporsi
+
+in una rete a hub il numero dei dati non cambia, infatti è identico ad un sistema con un unico segmento
+
+gli hub costano poco e hanno una buona tolleranza ai guasti con la sua struttura gerarchica
+inoltre permettono un buono monitoraggio della rete
+
+
+BRIDGE(meccanismo di store and forward):
+
+livello OSI 2
+
+evoluzione dell'hub, permette di spezzare i domini di collisione
+
+i bridge ricevono i blocchi di dati, poi li memorizzano, ne leggono le intestazioni, e ritrasmettono questi blocchi solo sulla linea interessata(link di uscita)
+
+in poche parole hanno un filtro e prima di trasmettere verificano che la linea non stia gia comunicando qualcosa indietro
+
+vantaggi: isolazione domini di collisione, aumento del throughput, nessun limite sul range
+
+
+SWITCH(commutatore:
+
+livello collegamento OSI
+
+si tratta di un bridge con alte prestazioni e con più interfacce
+
+-numero elevato di interfacce
+-utilizzo di memorie ad accesso veloce per smistare i frame
+-garantiscono un collegamento per ogni stazione collegata(domini di collisione separati)
+-trasmissione full duplex(modalità di comunicazione che permette la trasmissione di dati tra due dispositivi contemporaneamente)
+
+lo switch esaminia l'intestazione del frame, e poi lo ritrasmette alla linea corrispondente ad essa(filtering and forwarding)
+
+
+DOMINIO DI COLLISIONE:
+
+segmento: cavo elettrico composto da due nodi, da una parte il server, stampante, ... e dall'altra l'utente
+
+dominio di collisione: segmento fisico della rete in cui i dati si possono incontrare
+
+dato che con l'aumento di host le collisioni sono molte di più si è deciso di suddividerle in diversi domini di collisione usando i dispositivi descritti sopra
+
+segmentazione: operazione di suddivisione dei domini di collisione in più domini
+
+TCP/IP:
+
+sono due protocolli uniti, internet e transmission control protocol
+
+questa architettura si basa su 4 livelli:
+
+-Livello Applicazione
+-Livello Trasporto
+-Livello Internet
+-Livello Host-rete(Accesso alla rete)
+
+Livello Applicazione:
+
+comprende i protocolli di dialogo con l'utente, come il trasferimento dati, email, login remoti:
+ftp: trasferimento file
+dns: "traduzione" di un dominio in un indirizzo di rete(ip)
+nfs: accesso a file salvati in remoto
+smtp: trasmissione di mail
+telnet: accesso da remoto ad un altro computer
+
+Trasporto(segmento TCP):
+
+crea una connessione tra sorgente e destinazione, suddivide il messaggio in vari segmenti numerati, che permettono di verificare la consegna(acknowledge)
+
+due tipi di servizi:
+-tipo stream(tcp)
+-tipo datagram(udp)
+
+
+Internet(datagramma IP):
+
+ha lo scopo di trovare il miglior percorso da far fare ai pacchetti per arrivare al destinatario
+Questo accade anche grazie dall'indirizzo IP(logico) che viene assegnato ad ogni dispositivo in base alla scheda di rete
+
+la trasmissione dei pacchetti avviene attraverso il protocollo IP e usa strumenti come il ROUTER(trova l'indirizzo fisico attraverso l'indirizzo IP e poi ritrasmette il dato al dispositivo con quell'indirizzo fisico)
+
+Quando i messaggi arrivano è compito del livello Transport riordinare i messaggi in base al numero
+
+Accesso alla Rete(Frame Ethernet):
+
+non fa propriamente parte del livello TCP/IP in quanto può variare di host in host
+si occupa del collegamento tra due o più host, qui ci sono cavi, connettori, schede di rete, hub, ecc
+
+Formato dei dati nel TCP/IP:
+
+
+Il protocollo IP utilizza la modalità di intradamento detta best-effort delivery, ma non effettua controlli sul flusso e sugli errori
+
+Un pacchetto IP è formato da un header(intestazione) e un trailer(dati in coda)
+
+imbustamento: operazioni che il livello del modello TCP/IP esegue su un dato aggiungendogli delle informazioni per poi spedirlo al livello sottostante
+Grazie a questo, quando il dato viene ricevuto si trova all'interno di una busta, che contiene tutte le sue informazioni
+
+Intestazione IP:
+
+-Vers: identifica la versione del protocollo IP del pacchetto, il può usato è l'IPv4 e l'IPv6
+-Lunghezza totale: lunghezza del datagramma(intestazione e dati) in byte
+-identificativo: valore che serve al destinatario di identificare un datagramma
+-checksum intestazione: controllo dell'errore dell'intestazione
+-indirizzo IP sorgente e destinazione: indirizzi dell'host e del destinatario
+
+Struttura indirizzi IP:
+
+composto da 32 bit
+l'ip viene spezzato in 2:
+net-id e host-id
+
+gli indirizzi IP vengono assegnati all'hosting provider da un'agenzia, e poi da li dati ai diversi dispositivi collegati a quel servizio
+
+Classi degli indirizzi IP:
+
+suddivisione degli indirizzi ip in base al valore del bit più significativo
+Le WAN sono di solito classe A mentre le LAN B o C
+Oltre al prefisso si distinguono anche per la dimensione dell'host-id e net-id
+
+La classe A per esempio serve per reti molto grandi con molti dispositivi, infatti può ospitare 127 reti(la rete 0.0.0.0 non è utilizzabile) e 2^24 host
+
+SUBNETTING:
+
+tecnica che permette la suddivisione di una rete in più sotto-reti, ottenendo così una separazione tra gli host
+
+Si ottiene suddividendo in 2 parti l'host-id dell'Ip in subnet e host
+
+subnet-mask: sequenza di bit che serve per individuare la sottorete di appartenenza di un host, sono indirizzi da 32 bit
+
+
+
+
+indirizzi privati e pubblici:
+
+
+gli indirizzi privati sono assegnati a dispositivi appartenenti ad una rete interna mentre quelli pubblici sono quelli distribuiti dal provider, in maniera:
+-statica: l'IP viene assegnato per un lungo periodo di tempo
+-dinamica: l'IP viene assegnato solo al momento della connessione, poi cambia di nuovo
+
+alcuni IP sono riservati alla rete, ci sono indirizzi di rete e di broadcasting
+
