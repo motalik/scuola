@@ -3,7 +3,7 @@ dispositivi di rete a livello 2:
 Tempo fa l'ethernet aveva un singolo cavo coassiale, con agli estremi i terminatori, la rete poi veniva connessa ad un ripetitore, a cui si potevano connettere massimo 5 segmenti, e solo 3 potevano avere degli host connessi, gli altri no
 Repeater: apparato che riceve, amplifica e sincronizza i pacchetti
 
-BRIDGE:
+HUB:
 
 livello 1 dell'ISO/OSI
 
