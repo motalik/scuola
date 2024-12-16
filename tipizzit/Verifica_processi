@@ -1,0 +1,237 @@
+$"MODELLO A PROCESSI"$
+
+Modello a processi:
+
+Col tempo le capacità computazionali sono aumentate grazie allo sfruttamento al massimo delle capacità degli hardware per minimizzare i tempi di risposta e aumentare il throughput(produttività di un processo)
+Un programma consente di trasformare le istruzioni caricate in memoria in processi facendole diventare da entità passiva a entità attiva
+
+Processo: entità logica o programma in evoluzione caratterizzato da:
+1-codice del programma
+2-dati
+3-program counter
+4-registri della CPU
+5-stack
+
+Nella memoria il processo è composto da una parte statica e una dinamica e gli possono essere associate altre risorse come connessioni di rete, files, ...
+
+Tutto questo avviene grazie all'algoritmo di scheduling che permette di determinare la fine di un processo 
+
+La tecnica dei processi si chiama multiprogrammazione e permette l'evoluzione di più processi nello stesso momento limitando i tempi morti
+
+i processi possono essere indipendenti(si evolve in modo autonomo) oppure cooperanti(per evolvere necessitano di altri processi sincronizzati)
+
+Quando 2 processi cooperano si ottiene:
+1-parallelizzazione
+2-replicazione di un servizio
+3-modularità(funzioni diverse in una stessa applicazione, tipo il correttore di Word)
+4-condivisione delle informazioni
+
+
+A volte capita però che due processi si ostacolino compromettendo l'operazione e che quindi si mettano in competizione per utilizzare la stessa risorsa
+
+
+Stato dei processi:
+
+un programma diventa un processo quando viene utilizzato dal processore e finisce(ciclo di vita del processo) per:
+-comando di terminazione
+-operazione illecita
+-errore
+
+durante la vita del processo ci sono diversi stati:
+1-nuovo: appena creato
+2-esecuzione: sta evolvendo ed è assegnato al processore
+3-attesa: gli manca una risorsa e quindi aspetta
+4-pronto: ha tutto il necessario per essere usato
+5-finito: tutto è stato eseguito e le sue risorse vengono liberate
+
+
+Sospensione per interrupt:
+
+L'interruzione avviene quando il processo ha finito il suo tempo e gli viene inviato un comando di interruzione dove il SO opera il CONTEXT SWITCHING(azioni di salvataggio dei dati di un processo)
+
+A volte capita che un processo venga fermato a causa di un comando inviato da un dispositivo I/O(interrupt hardware) oppure che ci sia un errore, quindi il programma viene messo sull'hardware dedicato alle interruzioni e la CPU va avanti al ripristino del processo
+
+
+Comandi creazione, sospensione e terminazione:
+
+NIX LIKE: sistemi operativi tra loro somiglianti
+
+Durante una chiamata di terminazione:
+1-si genera un PID per il figlio e nuovi dati per il PCB
+2-nella memoria vengono copiati i dati del processo padre così da avere due processi uguali che però alla funzione fork() restituiscono valori diversi
+
+
+
+PCB(Process Control Block):
+
+il descrittore del processo associa ad ogni processo sto cazzo di PCB che contiene tutte le sue informazioni:
+1-identificatore PID
+2-stato corrente
+3-program counter
+4-contenuto registri
+5-informazioni di scheduling
+6-informazioni per la gestione della memoria
+7-infor. del I/O
+8-infor. di accounting(tipo il tempo impiegato, ...)
+
+
+Questi PCB vengono tutti inseriti in una tabella tenuta dal SO chiamata Process Table, ad esempio il gestione attività di un sistema operativo
+
+
+
+
+$"RISORSE E CONDIVISIONE"&
+
+Generalità:
+
+I processi come sappiamo hanno bisogno di risorse per evolversi, le risorse sono dei componenti riutilizzabili, hardware/softwaree che servono per far funzionare un processo
+
+Per accedere a queste risorse i processi spesso vanno in competizione, per esempio i processi che combattono per la memoria in RAM, interfacce di rete, ecc
+
+Le risorse vengono suddivise in classe:
+
+-le risorse di una classe vengono chiamate istanze di una classe
+-il numero di queste istanze viene chiamato molteplicità del tipo di risorsa(numero massimo di risorse che un processo puà usare contemporaneamente, se si supera sto limite le risorse bisogna metterle in condivisione con altri processi)
+
+Per esempio quando ad un processo serve una risorsa viene attivata una richiesta di risorse
+
+condivisione e gestion:
+Ovviamente esistono delle regole per l'assegnazione delle risorse condivise e quindi una gestione delle risorse:
+1-statiche: pianificazione dell'assegnazione
+2-dinamiche: controllo del loro utilizzo
+
+il SO mette a disposizione:
+1-gestore della risorsa, che è un programma
+2-protocollo di accesso: procedura con cui il processo effettua una richiesta di una risorsa, poi la ottiene e infine la libera
+
+
+Classificazioni:
+
+Classificazione delle richieste:
+
+A(secondo il numero):
+1.Singola, più comune
+2.Multipla: quando ad un processo servono per forza più risorse per evolversi
+
+B(tipo di richiesta):
+1.Bloccante: quando un processo necessita per forza di una risorsa, e se non gli viene data viene sospeso e va in attesa
+2.Non bloccante: il processo continua la evoluzione anche se non riesce ad avere la risorsa
+
+Classificazione dell'assegnazione:
+
+A(Statica):
+quando una risorsa rimane nel processo per sempre fino alla sua fine
+B(Dinamica): più comune, le risorse vengono assegnate nel corso dell'evoluzione e quando non servono più vengono rilasciate
+
+Classificazione delle risorse:
+
+A(mutua esclusività):
+1.Risorse seriali: in questo caso la risorsa non può essere assegnata in contemporanea a più processi quindi si crea un coda e quando un processo riesce ad ottenere la risorsa gli altri vanno in attesa
+2.Risorse non seriali: in questo caso la risorsa può essere asseggnata in contemporanea
+
+B(modalità di utilizzo):
+1.Risorse prerilasciabili: quando una risorsa può essere rilasciata mentre viene usata da un processo senza causare problemi, poi viene ridata indietro e il processo riprende da dove aveva interrotto. Per essere rilasciabile:
+-il suo stato non si modifica durante l'utilizzo
+-il suo stato può essere salvato facilmente
+2.Risorse non prerilasciabili: l'opposto dell'altra, quindi che una risorsa non può essere presa da un altro processo sennò si sfancula tutto
+
+
+Grafo di Holt:
+
+Permette di rappresentare l'allocazione delle risorse grazie ad un grafo in cui vengono rappresentate tutte le situzioni che si possono verificare, utile per individuare punti pericolosi tra processi e risorse
+
+Sono presenti:
+-nodi di forma quadrata(risorse), forma rettangolare(classi di risorse)
+-nodi di forma rotonda(processi)
+
+tra sti cazzo di nodi vengono effettuati collegamenti con degli archi:
+-arco che connette una risorsa ad un processo = risorsa assegnata
+-arco che connette un processo ad una risorsa = processo ha richiesto una risorsa
+
+si creano così:
+-un grafo orientato diretto, quindi con gli archi in una sola direzione
+-un grafo bipartito
+
+se sono presenti più istanze in una stessa classe di risorse allora si fa una partizione della risorsa
+
+Un grafo è riducibile se i processi sono in grado di evolvere e quindi liberare delle risorse e che quindi ogni processo abbia solo archi entranti e non uscenti
+Se non si può ridurre allora avremo uno stallo
+
+esempi pag 16-17
+
+
+
+$"THREAD(PROCESSI LEGGERI)"$
+
+Generalità:
+
+Dato che i processi non sono per nulla adatti a compiere azioni di grande cooperazioni sono stati introdotti i thread, che aiutano la realizzazione di attività collettive
+
+
+Processi pesanti:
+
+Sarebbero i processi, caratterizzati quindi da PID, Program Counter, ecc(immagine di un processo) e utilizza risorse come file, I/O, ecc(risorse di un processo)
+
+ogni processo ha uno SPAZIO DI INDIRIZZAMENTO(insieme di immagini e risorse di un processo)
+
+il tempo che la CPU spreca a salvare e ripristinare un processo quando serve si chiama overhead(costo di gestione)
+
+
+Processi leggeri:
+
+Sarebbero i thread: segmento di codice che viene eseguito all'interno di un processo pesante, tutti i thread all'interno di un processo pesante condividono le sue risorse
+Il thread può essere attivato in parallelo ad altri thread
+
+Se in un processo vengono eseguiti insieme più thread allora di parla di multithreading
+i thread sono caratterizzati da un TCB(thread control block):
+1-identificatore
+2-program counter
+3-insieme di registri
+4-stato di esecuzione(running, ready, blocked)
+5-stack di esecuzione
+6-spazio di memoria per i dati locali
+7-puntatore nel PCB
+
+L'utilizzo di thread permette lo sfruttamento a pieno delle architetture dei processori e comunicano con il SO grazie a dei systemcall che usano tabelle e dati relative al processo
+
+Thread safety: garantisce che nessun thread possa interagire con dati in stato incosistente(correttezza delle transazioni dei dati)
+
+Confronto tra processi e thread(pagina 24)
+
+
+Soluzioni adottate(single threading e multithreading):
+Single threading: 
+1-singolo processo e thread singolo
+2-singolo processo e thread multiplo per processo
+3-multiplo processo e thread singolo
+4-multiplo processo e multiplo thread
+
+
+Stati di un thread:
+
+Gli stati di un thread sono legati alla vita del processo che li genera, quindi se un processo termina lo fa anche il thread, cè anche lo stato indipendente, quindi se un processo è in attesa il thread continua ad andare(grafico pag 26)
+
+Stati:
+
+1-Idle
+2-Dead
+3-Blocked
+4-Sleeping
+5-Waiting
+6-Running
+7-Ready
+
+
+Utilizzo dei thread:
+
+i thread permettono ad un processo di eseguire più funzioni insieme sia in foreground che in background
+
+
+
+$"SLIDES"$
+
+Fork in C
+
+I Thread
+
+Stack e Heap
